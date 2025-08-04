@@ -14,27 +14,42 @@ func main() {
 	apiKey := os.Getenv("GEMINI_APIKEY")
 	if apiKey == "" {
 		log.Fatal("Invalid API key. Please set the GEMINI_APIKEY environment variable.")
+		sendNotification("[ERROR] GrammarFixer", "Invalid API key.")
 	}
 
 	ctx := context.Background()
 	client, err := genai.NewClient(ctx, &genai.ClientConfig{APIKey: apiKey})
 	if err != nil {
 		log.Fatalf("Failed to create GenAI client: %v", err)
+		sendNotification("[ERROR] GrammarFixer", "Unable to create GenAI client.")
 	}
+
+	sendNotification("[INFO] GrammarFixer", "Started fixing grammar")
 
 	clipboardText, err := getClipboardText()
 	if err != nil {
 		log.Fatalf("Failed to read from clipboard: %v", err)
+		sendNotification("[ERROR] GrammarFixer", "Unable to read clipboard.")
 	}
 
 	correctedText, err := fixGrammar(ctx, client, clipboardText)
 	if err != nil {
 		log.Fatalf("Failed to process text: %v", err)
+		sendNotification("[ERROR] GrammarFixer", "Unable to process text.")
 	}
 
 	if err := writeToClipboard(correctedText); err != nil {
 		log.Fatalf("Failed to write to clipboard: %v", err)
+		sendNotification("[ERROR] GrammarFixer", "Unable to write text to clipboard.")
 	}
+
+	sendNotification("[INFO] GrammarFixer", "Finished fixing grammar")
+}
+
+func sendNotification(title string, text string) error {
+	cmd := exec.Command("notify-send", "-t", "1500", title, text)
+	err := cmd.Run()
+	return err
 }
 
 func getClipboardText() (string, error) {

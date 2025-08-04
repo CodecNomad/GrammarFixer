@@ -107,7 +107,7 @@ func fixGrammar(ctx context.Context, client *genai.Client, input string) (string
 
 	if strings.Contains(input, "[FAST]") {
 		model = "gemini-2.5-flash-lite"
-		input = strings.ReplaceAll(input, "[QUALITY]", "")
+		input = strings.ReplaceAll(input, "[FAST]", "")
 	}
 
 	re := regexp.MustCompile(`(?i)\[INST=(.*?)\]`)

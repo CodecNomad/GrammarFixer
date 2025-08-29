@@ -1,0 +1,22 @@
+# Build artifacts
+main
+GrammarFixer
+*.exe
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Test coverage
+*.out
+coverage.html
+
+# Temporary files
+/tmp/
+*.tmp
